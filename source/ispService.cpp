@@ -1,32 +1,7 @@
 #include "ispService.hpp"
 
 IpsService::IpsService() {
-	// First, set up getting framebuffer code
-	// Get the PID from the Title ID
-	pmdmntGetProcessId(&VI_pid, VITitleId);
-	// Get the pointer to the main framebuffer in VI
-	Result rc = svcDebugActiveProcess(&VIdbg, VI_pid);
-	if(R_SUCCEEDED(rc)) {
-		uint64_t addr = 0;
-		// Loops for 0x1000 because it shouldn't go infinitely
-		for(int i = 0; i < 0x1000; i++) {
-			MemoryInfo info;
-			uint32_t pageinfo;
-			rc = svcQueryDebugProcessMemory(&info, &pageinfo, VIdbg, addr);
-			if(info.type == MemType_CodeMutable) {
-				if(info.size == 0x1A40000) {
-					// Set the address now that it is known
-					framebufferPointer = info.addr;
-					break;
-				}
-			} else if(info.type == MemType_Reserved) {
-				break;
-			}
-			addr += info.size;
-		}
-		svcCloseHandle(VIdbg);
-	}
-	// Next, set up the overlay code
+	// Set up the overlay code
 	// https://github.com/averne/dvdnx/blob/master/src/screen.cpp
 	rc = smInitialize();
 	if(R_FAILED(rc)) {

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <switch.h>
 #include <stratosphere/fssrv/fssrv_interface_adapters.hpp>
 
 // I dunno what this is
@@ -29,18 +30,6 @@ private:
 
 	// Error handling for everything
 	Result rc;
-
-	// Framebuffer stuff
-	u64 VI_pid;
-	// The Title Id of VI (The display manager)
-	static constexpr u64 VITitleId = 0x010000000000002D;
-	Handle VIdbg;
-	// Size of the framebuffer
-	// Width * Height * Byte depth (1280 * 720 * 4)
-	static constexpr u64 framebufferSize = 3686400;
-
-	// Pointer to framebuffer data in VI
-	u64 framebufferPointer;
 
 	// Overlay stuff
 	ViDisplay display;
