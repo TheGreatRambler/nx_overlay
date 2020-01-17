@@ -1,7 +1,7 @@
 #pragma once
 
-#include <switch.h>
 #include <stratosphere/fssrv/fssrv_interface_adapters.hpp>
+#include <switch.h>
 
 // I dunno what this is
 extern "C" u64 __nx_vi_layer_id;
@@ -10,22 +10,14 @@ class IpsService : public ams::sf::IServiceObject {
 
 private:
 	enum CommandId {
-		// A short description of each
-		// This allows you to set the width, height, x, and y of the to-be-read framebuffer
-		// It also sets the framebuffer code to read
-		StartGetFramebuffer = 0,
-		// Get a certain number of bytes of the specified framebuffer
-		GetFramebufferChunk = 1,
-		// End the framebuffer reading right now
-		EndGetFramebuffer = 2,
 		// This can only be run once, it sets things such as the layer and otherwise
-		SetupOverlay = 3,
+		SetupOverlay = 1,
 		// This allows you to set the width, height, x, and y of the overlay right now
-		StartWriteOverlay = 4,
+		StartWriteOverlay = 2,
 		// Write a specific number of bytes
-		WriteOverlayChunk = 5,
+		WriteOverlayChunk = 3,
 		// Finish it off
-		EndWriteOverlay = 6,
+		EndWriteOverlay = 4,
 	};
 
 	// Error handling for everything
@@ -42,13 +34,6 @@ private:
 public:
 	IpsService();
 
-	ams::Result StartGetFramebuffer(s16 width, s16 height, s16 x, s16 y);
-
-	ams::Result GetFramebufferChunk(s32 bytesToRead);
-
-	ams::Result EndGetFramebuffer();
-
-	// Doesn't actually create a new window, just used for internal logic
 	ams::Result SetupOverlay(s8 layer);
 
 	ams::Result StartWriteOverlay(s16 width, s16 height, s16 x, s16 y);
@@ -155,9 +140,6 @@ public:
 
 	// Corresponds to each CommandId
 	DEFINE_SERVICE_DISPATCH_TABLE {
-		MAKE_SERVICE_COMMAND_META(StartGetFramebuffer),
-		MAKE_SERVICE_COMMAND_META(GetFramebufferChunk),
-		MAKE_SERVICE_COMMAND_META(EndGetFramebuffer),
 		MAKE_SERVICE_COMMAND_META(SetupOverlay),
 		MAKE_SERVICE_COMMAND_META(StartWriteOverlay),
 		MAKE_SERVICE_COMMAND_META(WriteOverlayChunk),
